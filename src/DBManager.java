@@ -19,6 +19,11 @@ public class DBManager {
     public DBManager(){
         String url = "jdbc:sqlite:C:\\Users\\gerli\\OneDrive\\Imágenes\\db.sqlite";
 
+
+
+
+
+
         try {
             conexion = DriverManager.getConnection(url);
             System.out.println("Conexión a BD exitosa.");
