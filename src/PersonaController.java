@@ -78,6 +78,27 @@ public class PersonaController extends UnicastRemoteObject implements IPersonaCo
     }
 
     @Override
+    public int delete(int idPersona) throws RemoteException {
+        IPersona personaTemp = findOne(idPersona); 
+        if (personaTemp.getId() == 0) { 
+            return DELETE_ID_INEXISTENTE;
+        }
+    
+        Map<String, Object> where = new HashMap<>();
+        where.put("IdPersona", idPersona); 
+        int respuesta = dbManager.eliminar(TABLE, where); 
+        if (respuesta == 0) {
+            return DELETE_SIN_EXITO; 
+        } else {
+            return DELETE_EXITO; 
+        }
+    }
+    
+
+
+
+
+    @Override
     public List<IPersona> list() throws RemoteException {
         // TODO Auto-generated method stub
         List<IPersona> listaIPersona = new ArrayList<>();
@@ -104,4 +125,24 @@ public class PersonaController extends UnicastRemoteObject implements IPersonaCo
         return Persona.fromMap(registro);
 
     }
+
+    @Override
+    public List<IPersona> find(IPersona persona) throws RemoteException {
+        // TODO Auto-generated method stub
+        List<IPersona> listaIPersona = new ArrayList<>();
+
+
+        Map<String, Object> where =  Persona.toMap(persona);
+        List<Map<String, Object>> registros = dbManager.listar(TABLE, null);
+
+        for (Map<String, Object> registro : registros) {
+            IPersona personaTemp = Persona.fromMap(registro);
+
+            listaIPersona.add(personaTemp);
+        }
+
+        return listaIPersona;
+    }
 }
+
+   
