@@ -25,8 +25,8 @@ public class PersonaController extends UnicastRemoteObject implements IPersonaCo
 
     @Override
     public int add(IPersona persona) throws RemoteException {
-      IPersona personaEncontrado = findOne ( persona.getId() );
-      boolean existe = personaEncontrado.getId() != 0;
+        IPersona personaEncontrado = findOne(persona.getId());
+        boolean existe = personaEncontrado.getId() != 0;
         if (existe) {
             return ADD_ID_DUPLICADO;
         }
@@ -40,28 +40,41 @@ public class PersonaController extends UnicastRemoteObject implements IPersonaCo
     @Override
     public int update(IPersona persona) throws RemoteException {
         // TODO Auto-generated method stub
-        if(persona.getId() == 0){
+        if (persona.getId() == 0) {
             return UPDATE_ID_NULO;
         }
-        //VERIFICAR QUE EXISTE PERSONA CON ID  RECIBIDO 
+        // VERIFICAR QUE EXISTE PERSONA CON ID RECIBIDO
         IPersona personaEncontrado = findOne(persona.getId());
-       if( personaEncontrado.getId() == 0){
-        return UPDATE_INEXISTE;
-       }
+        if (personaEncontrado.getId() == 0) {
+            return UPDATE_INEXISTE;
+        }
 
-       Map<String, Object> datos  = Persona.toMap(persona);
-       Map<String, Object> where = new HashMap<>();
-       where.put("IdPersona", persona.getId());
-      int respuesta =  dbManager.actualizar(TABLE, datos, where);
+        Map<String, Object> datos = Persona.toMap(persona);
+        Map<String, Object> where = new HashMap<>();
+        where.put("IdPersona", persona.getId());
+        int respuesta = dbManager.actualizar(TABLE, datos, where);
 
-    return (respuesta > 0) ? UPADATE_EXITO : UPDATE_SIN_EXITO;
-    
+        return (respuesta > 0) ? UPADATE_EXITO : UPDATE_SIN_EXITO;
+
     }
 
     @Override
     public int delete(IPersona persona) throws RemoteException {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'delete'");
+        IPersona personaTemp = findOne(persona.getId());
+        if (personaTemp.getId() == 0) {
+            return DELETE_ID_INEXISTENTE;
+        }
+
+        Map<String, Object> where = new HashMap<>();
+        where.put("IdPersona", persona.getId());
+        int respuesta = dbManager.eliminar(TABLE, where);
+        if (respuesta == 0) {
+            return DELETE_SIN_EXITO;
+        } else {
+            return DELETE_EXITO;
+
+        }
     }
 
     @Override
@@ -84,13 +97,11 @@ public class PersonaController extends UnicastRemoteObject implements IPersonaCo
     public IPersona findOne(int idPersona) throws RemoteException {
         // TODO Auto-generated method stub
 
-            Map<String, Object> where = new HashMap<>();
-            where.put("IdPersona", idPersona);
-            Map<String, Object> registro = dbManager.buscarUno(TABLE, where);
+        Map<String, Object> where = new HashMap<>();
+        where.put("IdPersona", idPersona);
+        Map<String, Object> registro = dbManager.buscarUno(TABLE, where);
 
-         return Persona.fromMap(registro);
-           
-        }
+        return Persona.fromMap(registro);
+
     }
-
-
+}

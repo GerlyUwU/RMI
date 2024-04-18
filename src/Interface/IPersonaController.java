@@ -28,4 +28,9 @@ public interface IPersonaController extends Remote {
    int UPDATE_INEXISTE  = 2;
    int UPDATE_ID_NULO = 3;
    int UPDATE_SIN_EXITO = 4;
+
+   int DELETE_EXITO = 1; 
+   int DELETE_ID_INEXISTENTE = 2;
+   int DELETE_ID_NULO = 3; 
+   int DELETE_SIN_EXITO = 4;
 }
