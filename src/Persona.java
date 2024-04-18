@@ -1,5 +1,6 @@
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.HashMap;
 import java.util.Map;
 
 import Interface.IPersona;
@@ -80,6 +81,24 @@ public class Persona extends UnicastRemoteObject implements IPersona {
             }
             return persona;
         
+
+    }
+    
+    public static Map<String, Object> toMap (IPersona persona )throws RemoteException{
+        Map<String, Object> datos = new HashMap<>();
+        if (persona.getId() != 0) {
+            datos.put("IdPersona", persona.getId());
+        }
+        if (persona.getNombre() != null) {
+            datos.put("Nombre", persona.getNombre());
+        }
+        if (persona.getTelefono() != null) {
+            datos.put("Telefono", persona.getTelefono());
+        }
+        if (persona.getEmail() != null) {
+            datos.put("Email", persona.getEmail());
+        }
+        return datos;
 
     }
 }
